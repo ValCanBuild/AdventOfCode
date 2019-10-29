@@ -9,7 +9,7 @@ func main() {
 	lines := utils.ReadFileAsStringLines("input.txt")
 
 	part1(lines)
-	// part2(lines)%
+	part2(lines)
 }
 
 func part1(input []string) {
