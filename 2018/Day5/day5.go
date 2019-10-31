@@ -5,22 +5,27 @@ import (
 	"utils"
 	"unicode"
 	"strings"
+	"time"
 )
 
 func main() {
 	polymer := utils.ReadFileAsString("input.txt")
 
-	part1(polymer)
+	polymer = part1(polymer)
 	part2(polymer)
 }
 
-func part1(polymer string) {
+func part1(polymer string) string {
+	defer utils.TimeTrack(time.Now(), "part1")
 	finalPolymer := reactPolymer(polymer)
 
 	fmt.Println("Final polymer length is", len(finalPolymer))
+
+	return finalPolymer
 }
 
 func part2(polymer string) {
+	defer utils.TimeTrack(time.Now(), "part1")
 	shortestLength := utils.MaxInt
 
 	for i := 65; i <= 90; i++ {
@@ -52,14 +57,11 @@ func reactPolymer(polymer string) string {
 			char := rune(newPolymer[i])
 			prevChar := rune(newPolymer[i+1])
 
-			isSameLetter := unicode.ToLower(char) == unicode.ToLower(prevChar)
-			if isSameLetter {
-				canReact := (unicode.IsUpper(char) && unicode.IsLower(prevChar)) || (unicode.IsLower(char) && unicode.IsUpper(prevChar))
-				if canReact {
-					newPolyStart := newPolymer[:i]
-					newPolyEnd := newPolymer[i+2:]
-					newPolymer = newPolyStart + newPolyEnd
-				}
+			canReact := char != prevChar && unicode.ToLower(char) == unicode.ToLower(prevChar)
+			if canReact {
+				newPolyStart := newPolymer[:i]
+				newPolyEnd := newPolymer[i+2:]
+				newPolymer = newPolyStart + newPolyEnd
 			}
 		}
 
