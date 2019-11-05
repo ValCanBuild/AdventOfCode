@@ -51,7 +51,7 @@ func main() {
 		}
 	}
 
-	// part1(points, minY, minX, maxY, maxX)
+	part1(points, minY, minX, maxY, maxX)
 	part2(points, minY, minX, maxY, maxX)
 }
 
