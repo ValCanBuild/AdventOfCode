@@ -1,9 +1,7 @@
 <?php
 
-$inputFile = fopen("input.txt", "r") or die("Unable to open file!");
-$read = fread($inputFile, filesize("input.txt"));
-fclose($inputFile);
-$lines = explode("\n", $read);
+$input = file_get_contents("input.txt");
+$lines = explode("\n", $input);
 
 // part1($lines);
 part2($lines);
