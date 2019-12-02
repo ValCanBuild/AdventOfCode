@@ -7,7 +7,8 @@ $numbers = array_map(function($line) {
 }, $lines);
 
 part1($numbers);
-// part2($lines);
+echo "\n";
+part2($numbers);
 
 function part1($numbers) {
     $numbers[1] = 12;
@@ -39,6 +40,52 @@ function part1($numbers) {
     echo "Final value of position 0 is $numbers[0]";
 }
 
-function part2($lines) {
+function part2($originalNumbers) {
+    for ($i = 0; $i <= 99; $i++) {
+        for ($j = 0; $j <= 99; $j++) {
+            $output = outputForInputs($originalNumbers, $i, $j);
+            if ($output == 19690720) {
+                echo "Result reached with noun $i and verb $j \n";
+                $answer = (100 * $i) + $j;
+                echo "Answer is $answer";
+            }
+        }
+    }
+}
+
+function outputForInputs($numbers, $noun, $verb) {
+    $numbers[1] = $noun;
+    $numbers[2] = $verb;
+    $pos = 0;
+
+    while (true) {
+        $opCode = $numbers[$pos];
+        
+        if ($opCode == 99) {
+            break;
+        }
+
+        $posInputA = $numbers[$pos+1];
+        $posInputB = $numbers[$pos+2];
+        $posResult = $numbers[$pos+3];
+
+        $inputA = $numbers[$posInputA];
+        $inputB = $numbers[$posInputB];
+
+        $output;
+
+        if ($opCode == 1) {
+            $output = $inputA + $inputB;
+        } else if ($opCode == 2) {
+            $output = $inputA * $inputB;
+        } else {
+            die("Unknown opcode $opCode");
+        }
+
+        $numbers[$posResult] = $output;
+
+        $pos += 4;
+    }
     
+    return $numbers[0];
 }
