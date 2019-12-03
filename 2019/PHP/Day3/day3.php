@@ -1,7 +1,5 @@
 <?php
 
-ini_set('memory_limit', '-1');
-
 class Point {
     public $x;
     public $y;
@@ -9,6 +7,11 @@ class Point {
     public function __construct($x, $y) {
         $this->x = $x;
         $this->y = $y;
+    }
+    
+    public function __toString()
+    {
+        return "x:$this->x y:$this->y";
     }
 
     public function distance($fromPoint) {
@@ -19,15 +22,14 @@ class Point {
 $input = file_get_contents("input.txt");
 $lines = explode("\n", $input);
 
-// part1($lines);
+part1($lines);
+echo "\n";
 part2($lines);
 
 function part1($lines) {
-    $gridSize = 50000;
-    $grid = array_fill(0, $gridSize, array_fill(0, $gridSize, 0));
     $crossPointsClosestDistance = PHP_INT_MAX;
 
-    $centerPoint = new Point($gridSize/2, $gridSize/2);
+    $centerPoint = new Point(0, 0);
 
     $wireADirs = explode(",", $lines[0]);
     $wireAPos = new Point($centerPoint->x, $centerPoint->y);
@@ -54,7 +56,7 @@ function part1($lines) {
                 break;
             }
 
-            $grid[$wireAPos->x][$wireAPos->y] = 1;
+            $grid[(string) $wireAPos] = 1;
         }
     }
 
@@ -83,7 +85,7 @@ function part1($lines) {
                 break;
             }
 
-            if ($grid[$wireBPos->x][$wireBPos->y] == 1) {
+            if (key_exists((string) $wireBPos, $grid)) {
                 $crossPointsClosestDistance = min($crossPointsClosestDistance, $wireBPos->distance($centerPoint));
             }
         }
@@ -93,16 +95,11 @@ function part1($lines) {
 }
 
 function part2($lines) {
-    $gridSize = 20000;
-    $grid = array_fill(0, $gridSize, array_fill(0, $gridSize, 0));
-    $wireAStepCountGrid = array_fill(0, $gridSize, array_fill(0, $gridSize, 0));
-    $wireBStepCountGrid = array_fill(0, $gridSize, array_fill(0, $gridSize, 0));
     $fewestIntersectionSteps = PHP_INT_MAX;
-
-    $centerPoint = new Point($gridSize/2, $gridSize/2);
+    $wireAStepCountGrid = array();
 
     $wireADirs = explode(",", $lines[0]);
-    $wireAPos = new Point($centerPoint->x, $centerPoint->y);
+    $wireAPos = new Point(0, 0);
     $wireAStepCount = 0;
 
     foreach ($wireADirs as $wireDir) {
@@ -129,16 +126,14 @@ function part2($lines) {
 
             $wireAStepCount++;
 
-            $grid[$wireAPos->x][$wireAPos->y] = 1;
-
-            if ($wireAStepCountGrid[$wireAPos->x][$wireAPos->y] == 0) {
-                $wireAStepCountGrid[$wireAPos->x][$wireAPos->y] = $wireAStepCount;
+            if (!key_exists((string) $wireAPos, $wireAStepCountGrid)) {
+                $wireAStepCountGrid[(string) $wireAPos] = $wireAStepCount;
             }
         }
     }
 
     $wireBDirs = explode(",", $lines[1]);
-    $wireBPos = new Point($centerPoint->x, $centerPoint->y);
+    $wireBPos = new Point(0, 0);
     $wireBStepCount = 0;
 
     foreach ($wireBDirs as $wireDir) {
@@ -165,12 +160,8 @@ function part2($lines) {
 
             $wireBStepCount++;
 
-            if ($wireBStepCountGrid[$wireBPos->x][$wireBPos->y] == 0) {
-                $wireBStepCountGrid[$wireBPos->x][$wireBPos->y] = $wireBStepCount;
-            }
-
-            if ($grid[$wireBPos->x][$wireBPos->y] == 1) {
-                $stepCount = $wireAStepCountGrid[$wireBPos->x][$wireBPos->y] + $wireBStepCountGrid[$wireBPos->x][$wireBPos->y];
+            if (key_exists((string) $wireBPos, $wireAStepCountGrid)) {
+                $stepCount = $wireAStepCountGrid[(string) $wireBPos] + $wireBStepCount;
                 $fewestIntersectionSteps = min($fewestIntersectionSteps, $stepCount);
             }
         }
