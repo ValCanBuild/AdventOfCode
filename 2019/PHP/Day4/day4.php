@@ -1,7 +1,7 @@
 <?php
 
-// part1(284639, 748759);
-// echo "\n";
+part1(284639, 748759);
+echo "\n";
 part2(284639, 748759);
 
 function part1($bottomValue, $topValue) {
@@ -10,32 +10,24 @@ function part1($bottomValue, $topValue) {
 
     for ($value = $bottomValue; $value < $topValue; $value++) {
         $stringArr = str_split((string) $value);
-        $values = array_map(function($char) {
-            return intval($char);
-        }, $stringArr);
+        $sortedArr = $stringArr; 
+        sort($sortedArr);
 
-        $matches = false;
-        
-        foreach ($values as $index=>$val) {
-            if ($index < sizeof($values) - 1) {
-                if ($val > $values[$index+1]) {
-                    $matches = false;
-                    break;
-                }
-
-                if ($val == $values[$index+1]) {
-                    $matches = true;
-                }
-            }
+        if ($stringArr != $sortedArr) {
+            continue;
         }
 
-        if ($matches) {
-            $matchingValues[] = $value;
+        $counted = array_count_values($stringArr);
+        foreach ($counted as $val=>$occurrences) {
+            if ($occurrences > 1) {
+                $matchingValues[] = $value;
+                break;
+            }
         }
     }
 
     $numValues = sizeof($matchingValues);
-    echo "Num matching values are $numValues";
+    echo "Part 1 num matching values are $numValues";
 }
 
 function part2($bottomValue, $topValue) {
@@ -44,48 +36,19 @@ function part2($bottomValue, $topValue) {
 
     for ($value = $bottomValue; $value < $topValue; $value++) {
         $stringArr = str_split((string) $value);
-        $values = array_map(function($char) {
-            return intval($char);
-        }, $stringArr);
+        $sortedArr = $stringArr; 
+        sort($sortedArr);
 
-        $matches = true;
-        $hasTwoMatches = false;
-        $hasThreeOrMoreMatches = false;
-        
-        $lastMatched = -1;
-
-        foreach ($values as $index=>$val) {
-            if ($index < sizeof($values) - 1) {
-                if ($val > $values[$index+1]) {
-                    $matches = false;
-                    break;
-                }
-                
-                if ($val == $values[$index+1]) {
-                    $twoMatching = true;
-                 
-                    if ($twoMatching && $index < sizeof($values) - 2) {
-                        $twoMatching = $val != $values[$index+2];
-                        if (!$twoMatching) {
-                            $hasThreeOrMoreMatches = true;
-                        }
-                    }
-
-                    if ($twoMatching && !$hasTwoMatches && $val != $lastMatched) {
-                        $hasTwoMatches = $twoMatching;
-                    }
-                }
-
-                $lastMatched = $val;
-            }
-        }
-
-        if (!$matches) {
+        if ($stringArr != $sortedArr) {
             continue;
         }
 
-        if ($hasTwoMatches) {
-            $matchingValues[] = $value;
+        $counted = array_count_values($stringArr);
+        foreach ($counted as $val=>$occurrences) {
+            if ($occurrences == 2) {
+                $matchingValues[] = $value;
+                break;
+            }
         }
     }
 
