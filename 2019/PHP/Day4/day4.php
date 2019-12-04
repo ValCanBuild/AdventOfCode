@@ -52,6 +52,8 @@ function part2($bottomValue, $topValue) {
         $hasTwoMatches = false;
         $hasThreeOrMoreMatches = false;
         
+        $lastMatched = -1;
+
         foreach ($values as $index=>$val) {
             if ($index < sizeof($values) - 1) {
                 if ($val > $values[$index+1]) {
@@ -69,10 +71,12 @@ function part2($bottomValue, $topValue) {
                         }
                     }
 
-                    if ($twoMatching && !$hasTwoMatches) {
+                    if ($twoMatching && !$hasTwoMatches && $val != $lastMatched) {
                         $hasTwoMatches = $twoMatching;
                     }
                 }
+
+                $lastMatched = $val;
             }
         }
 
