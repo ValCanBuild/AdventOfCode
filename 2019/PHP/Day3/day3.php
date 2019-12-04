@@ -9,8 +9,7 @@ class Point {
         $this->y = $y;
     }
     
-    public function __toString()
-    {
+    public function __toString() {
         return "x:$this->x y:$this->y";
     }
 
