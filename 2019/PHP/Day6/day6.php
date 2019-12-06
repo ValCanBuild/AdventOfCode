@@ -22,7 +22,8 @@ class OrbitalObject
         }
     }
 
-    public function orbitChain() {
+    public function orbitChain()
+    {
         $orbits = array();
         $obj = $this->orbitObj;
 
@@ -65,7 +66,6 @@ function part1($orbitalObjects)
 
     echo "Total orbits is $totalOrbits";
 }
-
 
 function part2($orbitalObjects)
 {
